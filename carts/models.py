@@ -31,6 +31,7 @@ class Carrito(models.Model):
                 ('Pendiente','Pendiente'))
     solicitante = models.ForeignKey(User,on_delete=models.CASCADE)
     nombre = models.CharField(max_length=40,default='Desconocido',null=True)
+    imagen = models.ImageField(upload_to='carrito/%Y/%m/%d', blank=True)
     nombre_dueño = models.CharField(max_length=40,default='Desconocido',null=True)
     direccion = models.CharField(max_length=60)
     descripcion = models.TextField(null=True)
