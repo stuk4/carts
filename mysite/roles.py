@@ -1,6 +1,6 @@
 from rolepermissions.roles import AbstractUserRole
 
-class Cliente(AbstractUserRole):
+class Normal(AbstractUserRole):
     available_permissions = {
        
     }

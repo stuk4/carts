@@ -1,0 +1,49 @@
+.general-container{
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+}
+.container-detail{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+    height: 400px;
+    flex-wrap: wrap;
+}
+.container-info{
+    width:100%;
+   
+
+}
+.container-info:first-child{
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.container-info img {
+    max-width: 300px;
+    
+}
+.custom-file label{
+    overflow: hidden;
+}
+#alert-verde{
+    margin-top: 50px;
+    z-index: 100;
+}
+#alert-roja{
+    margin-top: 50px;
+    z-index: 100;
+}
+@media screen and (min-width:760px){
+    .container-info{
+        width: 48%;
+    }
+    
+}
+

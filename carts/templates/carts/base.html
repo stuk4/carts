@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="shortcut icon" href="{% static 'img/logo-carts.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
@@ -45,9 +46,8 @@
 
                         {% if user|has_role:'propietario' %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Modificar carrito</a>
+                        <a class="dropdown-item" href="{% url 'mis_carritos' %}">Modificar carrito</a>
                         {% endif %}
-
 
                 </li>
                 {% if user.is_anonymous %}
@@ -58,7 +58,7 @@
 
                 {% if user.is_authenticated %}
                 <li class="nav-item ">
-                    <form id="form-logout" class="nav-item" action="{% url 'logout' %}" method="post">
+                    <form id="form-logout"  action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
 
                         <a href="" onclick="document.getElementById('form-logout').submit();" class="nav-link">Cerrar

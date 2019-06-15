@@ -1,0 +1,48 @@
+{% extends 'carts/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ver_carrito.css' %}">
+{% endblock extra_css %}
+{% block content %}
+  <div class="container-detail">
+            <div class="container-info">
+                <img src="img/aire-1.jpg" alt="">
+              
+            </div>
+            <div class="container-info">
+                <h2>Pn pa la</h2>
+                <h6>Anais</h6>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis quod provident, quis doloribus blanditiis perspiciatis quam eos odit ex labori.</p>
+                <table class="table table-striped">
+                  
+                    <tbody>
+                        <tr>
+                            <td>Marca:</td>
+                            <td>Anais</td>
+
+                        </tr>
+                         <tr>
+                            <td>Medidas:</td>
+                            <td>1.65</td>
+
+                        </tr>
+                         <tr>
+                            <td>Peso:</td>
+                            <td>100kg</td>
+
+                        </tr>
+                   
+                    
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary">Comprar</button>
+            </div>
+        </div>
+{% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init()
+    })
+</script>
+{% endblock extra_js %}

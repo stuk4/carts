@@ -14,35 +14,36 @@
         {% endif %}
         <form class="bg-light rounded
 " enctype="multipart/form-data" method="POST"> {% csrf_token %}
-            <h2>Registrar carrito</h2>
+            <h2>Modificar mi carrito</h2>
+            <input type="hidden"  value="{{ micarro.id }}" name="txtid">
             <div class="form-group">
                 <label for="txtnombre">Nombre carrito:</label>
-                <input id="txtnombre" required name="txtnombre" placeholder="" class="form-control " type="text">
+                <input id="txtnombre" required name="txtnombre" value="{{ micarro.nombre }}" placeholder="" class="form-control " type="text">
             </div>
           
            <div class="form-group">
             <div class="custom-file">
-                <input type="file" name="txtimagen" class="custom-file-input" id="txtimagen" lang="es">
-                <label  class="custom-file-label" for="txtimagen">Seleccionar Archivo</label>
+                <input type="file" name="txtimagen" accept="image/*" value="{{ micarro.imagen.url }}" class="custom-file-input" id="txtimagen" lang="es">
+                <label  class="custom-file-label"  for="txtimagen">{{  micarro.imagen.name }}</label>
               </div>
            </div>
          <div class="form-group">
                 <label for="txtnomtxtnombredueñobre">Nombre dueño:</label>
-                <input id="txtnombredueño" required name="txtnombredueño" placeholder="" class="form-control " type="text">
+                <input id="txtnombredueño" required name="txtnombredueño"  value="{{ micarro.nombre_dueño }}" placeholder="" class="form-control " type="text">
             </div>
           <div class="form-group">
                 <label for="txtdireccion">Direccion:</label>
-                <input id="txtdireccion" required name="txtdireccion" placeholder="" class="form-control " type="text">
+                <input id="txtdireccion" required name="txtdireccion" value="{{ micarro.direccion }}"  placeholder="" class="form-control " type="text">
             </div>
           
          
             <div class="form-group">
                 <label for="txtdescripcion">Descripcion:</label>
-                <textarea txt="txtdescripcion" name="txtdescripcion" required id="txtdescripcion" class="form-control"></textarea>
+                <textarea txt="txtdescripcion" name="txtdescripcion" value="{{ micarro.descripcion }}" required id="txtdescripcion" class="form-control">{{ micarro.descripcion }}</textarea>
             </div>
 
             <div class="form-groupc " align="center">
-                <button type="submit" class="btn   btn-info btn-lg">Crear</button>
+                <button type="submit" class="btn   btn-info btn-lg">Modificar</button>
             </div>
         </form>
 {% endblock content %}

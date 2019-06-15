@@ -1,31 +1,31 @@
 {% extends 'carts/base.html' %}
 {% load static %}
 {% block extra_css %}
- <link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock extra_css %}
 {% block content %}
-  {% if messages %}
-        {% for message in messages %}
-        <div class="wow wobble" id="alert">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <strong> {{ message }} </strong>
-        </div>
-        {% endfor %}
-        {% endif %}
-        <form method="POST" class="login-form">{% csrf_token %}
+{% if messages %}
+{% for message in messages %}
+<div class="wow wobble" id="alert-{{ alert }}">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong> {{ message }} </strong>
+</div>
+{% endfor %}
+{% endif %}
+<form method="POST" class="login-form">{% csrf_token %}
 
-            <div class="container-icon wow bounceInDown">
-                <img src="{% static 'img/logo-carts.png' %}" alt="">
-            </div>
-            <div class="container-input">
-                <input name="txtuser" class="wow bounceInLeft" type="text" placeholder="Usuario">
-            </div>
-            <div class="container-input">
-                <input name="txtpass" class="wow bounceInRight" type="password" placeholder="******************">
-            </div>
-            <p id="error"></p>
-            <div class="container-input">
-                <button type="submit" class="wow bounceInUp">LOGIN</button>
-            </div>
-        </form>
+    <div class="container-icon wow bounceInDown">
+        <img src="{% static 'img/logo-carts.png' %}" alt="">
+    </div>
+    <div class="container-input">
+        <input name="txtuser" class="wow bounceInLeft" type="text" placeholder="Usuario">
+    </div>
+    <div class="container-input">
+        <input name="txtpass" class="wow bounceInRight" type="password" placeholder="******************">
+    </div>
+    <p id="error"></p>
+    <div class="container-input">
+        <button type="submit" class="wow bounceInUp">LOGIN</button>
+    </div>
+</form>
 {% endblock content %}
