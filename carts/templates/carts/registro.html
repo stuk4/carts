@@ -1,0 +1,50 @@
+{% extends 'carts/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/crear_carrito.css' %}">
+{% endblock extra_css %}
+{% block content %}
+
+        <form method="post" class="bg-light rounded
+" action="">{% csrf_token %}
+            <h2>Registrarse</h2>
+            <div class="form-group">
+                <label for="txttipo">Tipo de usuario:</label>
+                <select required class="form-control" name="txttipo" id="txttipo">
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Propietario">Propietario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <input required name="txtnombre" type="text" class="form-control" placeholder="Nombres">
+                    </div>
+                    <div class="col">
+                        <input required name="txtapellido" type="text" class="form-control" placeholder="Apellidos">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <input  name="txtnombre" type="text" class="form-control" placeholder="Direccion">
+                        </div>
+                        <div class="col">
+                            <input required name="txtapellido" type="text" class="form-control" placeholder="Telefono">
+                        </div>
+                    </div>
+                </div>
+            <div class="form-group">
+                <label  for="hora-examen">Email:</label>
+                <input required name="txtemail" id="hora-examen" placeholder="ejemplo@gmail.com" class="form-control form-control-lg " type="eamil">
+            </div>
+            <div class="form-group">
+                <label for="hora-examen">Contraseña:</label>
+                <input required name="txtpass" id="hora-examen" placeholder="***********************" class="form-control form-control-lg " type="password">
+            </div>
+            <div class="form-groupc " align="center">
+                <button class="btn   btn-info btn-lg">Registrarse</button>
+            </div>
+        </form>
+{% endblock content %}

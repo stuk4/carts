@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% load static %}
+{% load permission_tags %}
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="{% static 'img/logo-carts.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+    <nav
+        class="navbar  {% if not request.resolver_match.url_name == 'login'%}navbar-custom{% endif %} navbar-expand-lg navbar-light sticky-top bg-light">
+        <a class="navbar-brand" href="#"><img src="{% static 'img/logo-carts.png' %}" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item {% if request.resolver_match.url_name == "lista_carritos" %}active{% endif %} ">
+                    <a class="nav-link" href="{% url 'lista_carritos' %}">Carritos<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Ayudanos
+                    </a>
+
+                    <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                        {% if user.is_anonymous %}
+                        <a class="dropdown-item text-muted" href="{% url 'registro' %}">Registrar carritos </a>
+                        {% else %}
+                        <a class="dropdown-item {% if request.resolver_match.url_name == "crear_carrito" %}active{% endif %}" href="{% url 'crear_carrito' %}">Registrar carritos</a>
+                        {% endif %}
+
+
+                        {% if user|has_role:'propietario' %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Modificar carrito</a>
+                        {% endif %}
+
+
+                </li>
+                {% if user.is_anonymous %}
+                <li class="nav-item  {% if request.resolver_match.url_name == "registro" %}active{% endif %} ">
+                    <a class="nav-link" href="{% url 'registro' %}"> Registrarse</a>
+                </li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <li class="nav-item ">
+                    <form id="form-logout" class="nav-item" action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+
+                        <a href="" onclick="document.getElementById('form-logout').submit();" class="nav-link">Cerrar
+                            sesión</a>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item {% if request.resolver_match.url_name == "login" %}active{% endif %}">
+                    <a class="nav-link " href="{% url 'login' %}">Iniciar sesión</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </nav>
+    <div class="general-container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bs-custom-file-input.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/wow.js' %}"></script>
+    {% block extra_js %}
+    {% endblock extra_js %}
+    <script>
+        new WOW().init();
+    </script>
+</body>
+
+</html>

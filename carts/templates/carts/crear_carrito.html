@@ -1,0 +1,78 @@
+{% extends 'carts/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/crear_carrito.css' %}">
+{% endblock extra_css %}
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="wow wobble" id="alert-{{ alert }}">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong> {{ message }} </strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form class="bg-light rounded
+" enctype="multipart/form-data" method="POST"> {% csrf_token %}
+            <h2>Crear producto</h2>
+            <div class="form-group">
+                <label for="txtnombre">Nombre producto:</label>
+                <input id="txtnombre" required name="txtnombre" placeholder="" class="form-control " type="text">
+            </div>
+          
+           <div class="form-group">
+            <div class="custom-file">
+                <input type="file" name="txtimagen" class="custom-file-input" id="txtimagen" lang="es">
+                <label  class="custom-file-label" for="txtimagen">Seleccionar Archivo</label>
+              </div>
+           </div>
+         
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label for="txtmedidas">Dimensiones(Alto/Ancho/Largo)</label>
+                        <input required id="txtmedidas" name="txtmedidas" type="text" class="form-control" placeholder="ej: 16x16x25cm">
+                    </div>
+                    <div class="col">
+                        <label for="txtstock">Stock</label>
+                        <input required type="text" class="form-control"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            name="txtstock" placeholder="">
+                    </div>
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label for="txtmarca">Marca</label>
+                        <input  id="txtmarca" name="txtmarca" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="col">
+                        <label for="txtpeso">Peso (kg)</label>
+                        <input required type="text" class="form-control"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            name="txtpeso" id="txtpeso" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="txtprecio">Precio:</label>
+                <input id="txtprecio" name="txtprecio" class="form-control " required type="number">
+            </div>
+            <div class="form-group">
+                <label for="txtdescripcion">Descripcion:</label>
+                <textarea txt="txtdescripcion" name="txtdescripcion" required id="txtdescripcion" class="form-control"></textarea>
+            </div>
+
+            <div class="form-groupc " align="center">
+                <button type="submit" class="btn   btn-info btn-lg">Crear</button>
+            </div>
+        </form>
+{% endblock content %}
+{% block extra_js %}
+<script>
+$(document).ready(function () {
+  bsCustomFileInput.init()
+})
+</script>
+{% endblock extra_js %}

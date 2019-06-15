@@ -1,0 +1,28 @@
+
+.general-container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+    flex-wrap: wrap;
+
+    min-height: 100%;
+
+}
+.card{
+    margin: 10px;
+    min-height:450px ;
+    max-height:450px; 
+
+}
+.card-body{
+    overflow: hidden;
+    
+}
+.card img{
+    width: 100%;
+  
+   
+    max-height: 230px;
+    height: 100%;
+}
