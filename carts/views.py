@@ -201,9 +201,14 @@ def modificar_carrito(request,id):
     return render(request,'carts/modificar_carrito.html',variables)
 def ver_carrito(request,id):
     carrito = get_object_or_404(Carrito,id=id)
-    variables = {'carrito':carrito}
+    productos = Productos.objects.filter(carritos=id)
+    variables = {'carrito':carrito,
+                'productos':productos}
     return render(request,'carts/ver_carrito.html',variables)
 
+def mapa(request):
+    carros = Carrito.objects.all()
+    variables = {'carros':carros}
+    return render(request,'carts/mapa.html',variables)
 
-
-    ##ME FALTA AGREGAR PRODUTOS A UN CARRITO QUE NO PUEDOD HACERLO EN UN MISMO TEMPALTE T_T
+    ### me falta AGREGAR EL MENU A VER CARRITO Y ADEMAS A CALCULAR EL RECORRIDO Y TERMINARIA ALFIN CTM

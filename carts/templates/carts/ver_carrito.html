@@ -35,8 +35,58 @@
 
             </tbody>
         </table>
-        <button type="button" class="btn btn-primary">Comprar</button>
-        
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalScrollable">
+            Productos
+        </button>
+
+        <!-- Modal- VER PRODUCTOS -->
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Menu {{ micarro.nombre }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Descripcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for producto in productos %}
+                                    <tr>
+                                    <th scope="row">
+                                        {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url }}" alt=""></th>
+                                        {% endif %}
+                                    <td>{{ producto.nombre }}</td>
+                                    <td>{{ producto.precio }}</td>
+                                    <td>{{ producto.descripcion }}</td>
+                                </tr>
+                                
+                                {% endfor %}
+                            
+                           
+                            </tbody>
+                        </table>
+
+                
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
@@ -44,18 +94,65 @@
 <script type="text/javascript" charset="UTF-8" >
 
 
+function addMarkerToGroup(group, coordinate, html) {
+    var icono = "{% static 'img/50x80.png' %}";
+      var icon = new H.map.Icon(icono);
+  var marker = new H.map.Marker(coordinate,{icon:icon});
+  // add custom data to the marker
+  marker.setData(html);
+  group.addObject(marker);
+}
+
+/**
+ * Add two markers showing the position of Liverpool and Manchester City football clubs.
+ * Clicking on a marker opens an infobubble which holds HTML content related to the marker.
+ * @param  {H.Map} map      A HERE Map instance within the application
+ */
+function addInfoBubble(map) {
+  var group = new H.map.Group();
+
+  map.addObject(group);
+
+  // add 'tap' event listener, that opens info bubble, to the group
+  group.addEventListener('tap', function (evt) {
+    // event target is the marker itself, group is a parent event target
+    // for all objects that it contains
+    var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+      // read custom data
+      content: evt.target.getData()
+    });
+    // show info bubble
+    ui.addBubble(bubble);
+  }, false);
+
+  addMarkerToGroup(group, {lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} },
+    '<div><a href=\'{% url "ver_carrito" carrito.id %}\' >{{ carrito.nombre }}</a>' +
+    '</div><div >Dueño:{{ carrito.nombre_dueño}}</div>');}
+
+//   addMarkerToGroup(group, {lat:53.430, lng:-2.961},
+//     '<div ><a href=\'http://www.liverpoolfc.tv\' >Liverpool</a>' +
+//     '</div><div >Anfield<br>Capacity: 45,362</div>',{icon:icon});
+
+
+
+
+
+
+
+
+
     function centrarMaipu(map){
         map.setCenter({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} });
         map.setZoom(16);
       }
-      var icono = "{% static 'img/50x80.png' %}";
-      var icon = new H.map.Icon(icono);
-      function addMarkersToMap(map) {
-        var maipu = new H.map.Marker({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} },{icon:icon});
-        map.addObject(maipu);
+    //   var icono = "{% static 'img/50x80.png' %}";
+    //   var icon = new H.map.Icon(icono);
+    //   function addMarkersToMap(map) {
+    //     var maipu = new H.map.Marker({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} },{icon:icon});
+    //     map.addObject(maipu);
       
       
-      }
+    //   }
       
       
       
@@ -89,15 +186,15 @@
       var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
       
       // AGREGAR COMPONENTES UI
-      var ui = H.ui.UI.createDefault(map, defaultLayers);
+      var ui = H.ui.UI.createDefault(map, defaultLayers,'es-ES');
       
       //OPCIONES DEL MAPAA
       
       // PRIMERO ES PARA CENTRA EL MAPA EN MAIPUNGA
       centrarMaipu(map);
       // AGREGAR MARCADORES
-      addMarkersToMap(map);
-
+    //   addMarkersToMap(map);
+    addInfoBubble(map);
 </script>
 
 <script>
