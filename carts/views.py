@@ -12,7 +12,7 @@ from rolepermissions.checkers import has_role
 from rolepermissions.roles import assign_role
 from rolepermissions.utils import user_is_authenticated
 
-from carts.models import Carrito
+from carts.models import Carrito,Productos
 
 
 def login_view(request):
@@ -142,11 +142,12 @@ def mis_carritos(request):
 @login_required(login_url='login')
 def modificar_carrito(request,id):
     
-
+    
     micarro = get_object_or_404(Carrito,id=id)
+    productos = Productos.objects.filter(carritos=id)
     alert = 'verde'
     
-    if request.method == 'POST':
+    if request.method == 'POST' and 'btn-form-1' in request.POST:
         cart = Carrito()
         cart.id = request.POST.get('txtid')
         cart.solicitante = micarro.solicitante
@@ -162,18 +163,43 @@ def modificar_carrito(request,id):
             
             cart.save()
             messages.success(request,'Carrito modificado')
-           
-            return redirect('modificar_carrito',id=micarro.id)
-        except:
             
+            return redirect('modificar_carrito',id=micarro.id)
+        except Exception as e:
+            print('Este es el error vergaasxd')
+            print(type(e))
             alert = 'roja'
             messages.error(request,'Errror al modificar')
            
             return redirect('modificar_carrito',id=micarro.id)
-    
-    variables = {'alert':alert,
-                'micarro':micarro}
+    if  request.method == 'POST' and 'btn-form-2' in request.POST:
+        producto = Productos()
+        producto.carritos = micarro
+        producto.nombre = request.POST.get('txtnombrepro')
+        producto.imagen = request.FILES.get('txtimagenpro')
+        producto.precio = int(request.POST.get('txtprecio'))
+        producto.descripcion = request.POST.get('txtdescripcionpro')
+        try:
+            producto.save()
+            messages.success(request,'Producto agregado')
+            return redirect('modificar_carrito',id=micarro.id)
+        except Exception as e:
+            alert = 'roja'
+            print('Este es el error vergaasxd')
+            print(type(e))
+            messages.success(request,'Error al agregar producto')
+            return redirect('modificar_carrito',id=micarro.id)
 
+    variables = {'alert':alert,
+                'micarro':micarro,
+                'productos':productos}
+    print(productos)
     return render(request,'carts/modificar_carrito.html',variables)
-def ver_carrito(request):
-    pass
+def ver_carrito(request,id):
+    carrito = get_object_or_404(Carrito,id=id)
+    variables = {'carrito':carrito}
+    return render(request,'carts/ver_carrito.html',variables)
+
+
+
+    ##ME FALTA AGREGAR PRODUTOS A UN CARRITO QUE NO PUEDOD HACERLO EN UN MISMO TEMPALTE T_T

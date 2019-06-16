@@ -1,56 +1,174 @@
 {% extends 'carts/base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/crear_carrito.css' %}">
+<link rel="stylesheet" href="{% static 'css/modificar_carrito.css' %}">
 {% endblock extra_css %}
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="wow wobble" id="alert-{{ alert }}">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <strong> {{ message }} </strong>
-        </div>
-        {% endfor %}
-        {% endif %}
-        <form class="bg-light rounded
+{% if messages %}
+{% for message in messages %}
+<div class="wow wobble" id="alert-{{ alert }}">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong> {{ message }} </strong>
+</div>
+{% endfor %}
+{% endif %}
+<form class="form-one bg-light rounded
 " enctype="multipart/form-data" method="POST"> {% csrf_token %}
-            <h2>Modificar mi carrito</h2>
-            <input type="hidden"  value="{{ micarro.id }}" name="txtid">
-            <div class="form-group">
-                <label for="txtnombre">Nombre carrito:</label>
-                <input id="txtnombre" required name="txtnombre" value="{{ micarro.nombre }}" placeholder="" class="form-control " type="text">
-            </div>
-          
-           <div class="form-group">
-            <div class="custom-file">
-                <input type="file" name="txtimagen" accept="image/*" value="{{ micarro.imagen.url }}" class="custom-file-input" id="txtimagen" lang="es">
-                <label  class="custom-file-label"  for="txtimagen">{{  micarro.imagen.name }}</label>
-              </div>
-           </div>
-         <div class="form-group">
-                <label for="txtnomtxtnombredueñobre">Nombre dueño:</label>
-                <input id="txtnombredueño" required name="txtnombredueño"  value="{{ micarro.nombre_dueño }}" placeholder="" class="form-control " type="text">
-            </div>
-          <div class="form-group">
-                <label for="txtdireccion">Direccion:</label>
-                <input id="txtdireccion" required name="txtdireccion" value="{{ micarro.direccion }}"  placeholder="" class="form-control " type="text">
-            </div>
-          
-         
-            <div class="form-group">
-                <label for="txtdescripcion">Descripcion:</label>
-                <textarea txt="txtdescripcion" name="txtdescripcion" value="{{ micarro.descripcion }}" required id="txtdescripcion" class="form-control">{{ micarro.descripcion }}</textarea>
-            </div>
+    <h2>Modificar mi carrito</h2>
+    <input type="hidden" value="{{ micarro.id }}" name="txtid">
+    <div class="form-group">
+        <label for="txtnombre">Nombre carrito:</label>
+        <input id="txtnombre" required name="txtnombre" value="{{ micarro.nombre }}" placeholder=""
+            class="form-control " type="text">
+    </div>
 
-            <div class="form-groupc " align="center">
-                <button type="submit" class="btn   btn-info btn-lg">Modificar</button>
+    <div class="form-group">
+        <div class="custom-file">
+            <input type="file" name="txtimagen" accept="image/*" value="{{ micarro.imagen.url }}"
+                class="custom-file-input" id="txtimagen" lang="es">
+            <label class="custom-file-label" for="txtimagen">{{  micarro.imagen.name }}</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="txtnomtxtnombredueñobre">Nombre dueño:</label>
+        <input id="txtnombredueño" required name="txtnombredueño" value="{{ micarro.nombre_dueño }}" placeholder=""
+            class="form-control " type="text">
+    </div>
+    <div class="form-group">
+        <label for="txtdireccion">Direccion:</label>
+        <input id="txtdireccion" required name="txtdireccion" value="{{ micarro.direccion }}" placeholder=""
+            class="form-control " type="text">
+    </div>
+
+
+    <div class="form-group">
+        <label for="txtdescripcion">Descripcion:</label>
+        <textarea txt="txtdescripcion" name="txtdescripcion" value="{{ micarro.descripcion }}" required
+            id="txtdescripcion" class="form-control">{{ micarro.descripcion }}</textarea>
+    </div>
+
+    <div class="form-groupc " align="center">
+        <button type="submit"  name="btn-form-1" class="btn   btn-info btn-lg">Modificar</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalScrollable">
+            Productos
+        </button>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable2">
+            +
+        </button>
+
+     
+        <!-- Modal- VER PRODUCTOS -->
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Menu {{ micarro.nombre }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Descripcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for producto in productos %}
+                                    <tr>
+                                    <th scope="row">
+                                        {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url }}" alt=""></th>
+                                        {% endif %}
+                                    <td>{{ producto.nombre }}</td>
+                                    <td>{{ producto.precio }}</td>
+                                    <td>{{ producto.descripcion }}</td>
+                                </tr>
+                                
+                                {% endfor %}
+                            
+                           
+                            </tbody>
+                        </table>
+
+                
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                       
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
+    </div>
+</form>
+   <!-- Modal  AGREGAR PRODUCTOS -->
+        <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle2">Agregar productos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="agrega-pro" enctype="multipart/form-data" method="POST">{% csrf_token %}
+                            <div class="form-group">
+                                    <label for="txtimagen">Imagen productos:</label>
+                                <div class="custom-file">
+                                  
+                                    <input type="file" required name="txtimagenpro"  class="custom-file-input " id="txtimagenpro"
+                                        lang="es">
+                                    <label class="custom-file-label  my-auto" for="txtimagenpro">Seleccionar Archivo</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                            <input  required class="form-control" name="txtnombrepro" placeholder="Nombre" type="text">
+                                    </div>
+                                    <div class="col">
+                                            <input required type="text" class="form-control"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            name="txtprecio" id="txtprecio" placeholder="Precio">
+                                    </div>
+                                </div>
+                              
+                            </div>
+                            <div class="form-group">
+                                <label  for="txtdescripcionpro">Descripcion:</label>
+                                <textarea maxlength="15" id="txtdescripcionpro" class="form-control" name="txtdescripcionpro" ></textarea>
+                            </div>
+                            <div class="form-group">
+                               <div class="row">
+                                <button type="submit" class="btn btn-primary mx-auto " name="btn-form-2" >+ Agregar</button>
+                            </div>
+                            </div>
+                         
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerar</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div> 
 {% endblock content %}
 {% block extra_js %}
 <script>
-$(document).ready(function () {
-  bsCustomFileInput.init()
-})
+    $(document).ready(function () {
+        bsCustomFileInput.init()
+    })
 </script>
 {% endblock extra_js %}

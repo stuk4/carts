@@ -1,0 +1,22 @@
+.general-container{
+    background:url(../img/business-car-cart-2262177.jpg);
+   background-attachment: fixed;
+   background-position: bottom;
+   background-size: cover;
+   background-repeat: no-repeat;
+   
+}
+.general-container .form-one {
+   width: 80%;
+
+  
+   padding: 20px;
+  
+   background: rgb(1,114,76)
+}
+
+@media screen and (min-width:700px){
+   .general-container .form-one {
+       width: 50%;
+   }
+}
