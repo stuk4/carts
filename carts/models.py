@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-
+from django.utils.text import slugify
 
 class Perfil(models.Model):
     tipos = (('Propietario','Propietario'),
@@ -31,11 +31,17 @@ class Carrito(models.Model):
                 ('Pendiente','Pendiente'))
     solicitante = models.ForeignKey(User,on_delete=models.CASCADE)
     nombre = models.CharField(max_length=40,default='Desconocido',null=True)
+    slug = models.CharField(max_length=40,null=True,blank=True)
     imagen = models.ImageField(upload_to='carrito/%Y/%m/%d', blank=True)
+    latitud = models.FloatField(null=True)
+    longitud = models.FloatField(null=True)
     nombre_dueño = models.CharField(max_length=40,default='Desconocido',null=True)
     direccion = models.CharField(max_length=60)
     descripcion = models.TextField(null=True)
     estado = models.CharField(max_length=20,choices=estados,default='Pendiente')
+    def save(self, *args, **kwargs):
+        self.slug = self.nombre.lower().replace(" ",'_')
+        super(Carrito, self).save(*args, **kwargs)
     def __str__(self):
         return self.nombre
     

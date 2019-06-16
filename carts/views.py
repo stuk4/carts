@@ -111,6 +111,8 @@ def crear_carrito(request):
         cart = Carrito()
         cart.solicitante = request.user
         cart.nombre = request.POST.get('txtnombre')
+        cart.longitud = float(request.POST.get('txtlongitud'))
+        cart.latitud = float(request.POST.get('txtlatitud'))
         cart.imagen = request.FILES.get('txtimagen')
         cart.nombre_dueño = request.POST.get('txtnombredueño')
         cart.direccion = request.POST.get('txtdireccion')
@@ -156,6 +158,8 @@ def modificar_carrito(request,id):
             cart.imagen = micarro.imagen
         else:
             cart.imagen = request.FILES.get('txtimagen')
+        cart.longitud = micarro.longitud
+        cart.latitud = micarro.latitud
         cart.nombre_dueño = request.POST.get('txtnombredueño')
         cart.direccion = request.POST.get('txtdireccion')
         cart.descripcion = request.POST.get('txtdescripcion')
