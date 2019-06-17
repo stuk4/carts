@@ -41,6 +41,10 @@
     margin-top: 50px;
     z-index: 100;
 }
+th img{
+    max-width: 120px;
+    max-height: 100px;
+}
 @media screen and (min-width:760px){
     .container-info{
         width: 48%;

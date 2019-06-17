@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     {% block extra_css %}{% endblock %}
-
+  <title>{{ request.resolver_match.url_name }}</title>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                         {% if user.is_staff %}
                         Verificar
                         {% elif user.is_authenticated %}
-                        Mis verifiaciones
+                        Mis verificaciones
                         {% endif %}
                     </a>
 
@@ -78,7 +78,7 @@
 
                         {% if user|has_role:'propietario' %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'mis_carritos' %}">Modificar carrito</a>
+                        <a class="dropdown-item {% if request.resolver_match.url_name == "mis_carritos" %}active{% endif %}" href="{% url 'mis_carritos' %}">Modificar carrito</a>
                         {% endif %}
 
                 </li>
@@ -93,7 +93,7 @@
                     <form id="form-logout"  action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
 
-                        <a href="{% url 'logout' %}" onclick="document.getElementById('form-logout').submit();" class="nav-link">Cerrar
+                        <a href="" onclick="document.getElementById('form-logout').submit();" class="nav-link">Cerrar
                             sesión</a>
                     </form>
                 </li>

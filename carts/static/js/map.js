@@ -17,7 +17,7 @@
           const lat = ubicacion.coords.latitude;
             txtlat.value = lat;
             txtlon.value = lng;
-          console.log(`longitud: ${ lng } | latitud: ${ lat }`);
+         
         }
 
         

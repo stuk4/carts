@@ -6,6 +6,10 @@
     background-repeat: no-repeat;
     
 }
+#mi_ubicacion{
+    position: relative;
+    right: 0;
+}
 .general-container form {
     width: 80%;
  
