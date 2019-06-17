@@ -1,14 +1,17 @@
 .general-container{
     justify-content: center;
-    align-items: center;
-    margin-top: 0;
+    align-items: flex-start;
+    align-content: center;
+    padding: 0;
+    
+    
 }
 .container-detail{
     display: flex;
     justify-content: center;
     flex-direction: row;
     align-items: center;
-    width: 90%;
+    width: 99%;
     height: 400px;
     flex-wrap: wrap;
 }
@@ -26,8 +29,9 @@
 
 
 .container-info img,#map {
-    width: 400px;
-    height: 300px;
+    width: 100%;
+    height: 85vh;
+    margin-top: 2px;
     
 }
 .custom-file label{
@@ -49,6 +53,23 @@ th img{
     .container-info{
         width: 48%;
     }
-    
+    .container-info img,#map {
+        width: 600px;
+        height: 400px;
+        
+    }
+    .container-detail{
+      
+        width: 90%;
+        
+       
+    }
+    .general-container{
+       
+        align-items: center;
+      
+        
+        
+    }
 }
 
