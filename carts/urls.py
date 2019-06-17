@@ -1,7 +1,10 @@
-from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+
+
+
+from . import views
 
 urlpatterns = [
     path('',views.lista_carritos,name='lista_carritos'),
@@ -13,6 +16,12 @@ urlpatterns = [
     path('mis_carritos/',views.mis_carritos, name = 'mis_carritos'),
     path('mis_carritos/modificar_carrito/<int:id>/',views.modificar_carrito,name = 'modificar_carrito'),
     path('mapa/',views.mapa,name = 'mapa'),
+    path('verificar/propietarios/',views.estado_propietarios,name = 'estado_propietarios'),
+    path('verificar/propietarios/aceptar/<int:id>/',views.aceptar_propietario,name = 'aceptar_propietario'),
+    path('verificar/propietarios/rechazar/<int:id>/',views.rechazar_propietario,name = 'rechazar_propietario'),
+    path('verificar/carritos/',views.estado_carritos,name = 'estado_carritos'),
+    path('verificar/carritos/aceptar/<int:id>/',views.aceptar_carrito,name = 'aceptar_carrito'),
+    path('verificar/carritos/rechazar/<int:id>/',views.rechazar_carrito,name = 'rechazar_carrito'),
   
 ]
 if settings.DEBUG:

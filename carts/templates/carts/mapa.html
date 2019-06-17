@@ -49,7 +49,7 @@ function addInfoBubble(map) {
     ui.addBubble(bubble);
   }, false);
 {% for carro in carros %}
-{% if  carro.latitud  and  carro.longitud  %}
+{% if  carro.latitud  and  carro.longitud and carro.estado == 'Aceptado' %}
  addMarkerToGroup(group, {lat:{{ carro.latitud }}, lng:{{ carro.longitud }} },
     '<div><a href=\'{% url "ver_carrito" carro.id %}\' >{{ carro.nombre }}</a>' +
     '</div><div >Dueño:{{ carro.nombre_dueño}}</div>')

@@ -1,4 +1,6 @@
 
+from builtins import object
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -12,7 +14,7 @@ from rolepermissions.checkers import has_role
 from rolepermissions.roles import assign_role
 from rolepermissions.utils import user_is_authenticated
 
-from carts.models import Carrito,Productos
+from carts.models import Carrito, Perfil, Productos
 
 
 def login_view(request):
@@ -45,13 +47,21 @@ def registro(request):
     alert = 'verde' 
     if request.method == "POST":
         
-        if request.POST.get('txttipo') == 'Propietario':
-            try: 
-                user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'),is_active=False)
-            except:
-                messages.success(request,'Usuario ya registrado')
-                variabes = {'alert':alert} 
-                return render(request,'carts/registro.html',variabes)
+            if request.POST.get('txttipo') == 'Propietario':
+                try: 
+                    user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'),is_active=False)
+                except:
+                    messages.success(request,'Usuario ya registrado')
+                    variabes = {'alert':alert} 
+                    return render(request,'carts/registro.html',variabes)
+            else:
+                try:
+                    user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'))
+                except:
+                    alert = 'roja' 
+                    messages.success(request,'Usuarioya registrado')
+                    variabes = {'alert':alert} 
+                    return render(request,'carts/registro.html',variabes)
             user.perfil.tipo = request.POST.get('txttipo')
             user.email = request.POST.get('txtemail')
             user.first_name = request.POST.get('txtnombre')
@@ -69,31 +79,7 @@ def registro(request):
                 messages.success(request,'Los datos son incorrectos')
                 variabes = {'alert':alert} 
                 return render(request,'carts/registro.html',variabes)
-        else:
-            try:
-                user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'))
-            except:
-                alert = 'roja' 
-                messages.success(request,'Usuarioya registrado')
-                variabes = {'alert':alert} 
-                return render(request,'carts/registro.html',variabes)
-            user.perfil.tipo = request.POST.get('txttipo')
-            user.email = request.POST.get('txtemail')
-            user.first_name = request.POST.get('txtnombre')
-            user.last_name = request.POST.get('txtapellido')
-            user.perfil.direccion = request.POST.get('txtdireccion')
-            user.perfil.telefono = int(request.POST.get('txttelefono'))
-            try:
-                assign_role(user, 'normal')
-                user.save()
-                messages.success(request,'Registrado como usuario normal')
-                variabes = {'alert':alert} 
-                return render(request,'carts/registro.html',variabes)
-            except:
-                alert = 'roja' 
-                messages.success(request,'Los datos son incorrectos')
-                variabes = {'alert':alert} 
-                return render(request,'carts/registro.html',variabes)
+       
     else:       
     
                 
@@ -101,7 +87,7 @@ def registro(request):
         return render(request,'carts/registro.html',variabes)
 
 def lista_carritos(request):
-    carros = Carrito.objects.all()
+    carros = Carrito.objects.filter(estado='Aceptado')
     varibales = {'carros':carros}
     return render(request,'carts/lista_carritos.html',varibales)
 @login_required(login_url='login')
@@ -199,6 +185,7 @@ def modificar_carrito(request,id):
                 'productos':productos}
     print(productos)
     return render(request,'carts/modificar_carrito.html',variables)
+
 def ver_carrito(request,id):
     carrito = get_object_or_404(Carrito,id=id)
     productos = Productos.objects.filter(carritos=id)
@@ -210,5 +197,44 @@ def mapa(request):
     carros = Carrito.objects.all()
     variables = {'carros':carros}
     return render(request,'carts/mapa.html',variables)
+@user_passes_test(lambda u:u.is_staff, login_url=('login'))  
+def estado_propietarios(request):
+    propietarios =  User.objects.filter(perfil__tipo="Propietario")
+ 
+    variables = {'propietarios':propietarios}
 
-    ### me falta AGREGAR EL MENU A VER CARRITO Y ADEMAS A CALCULAR EL RECORRIDO Y TERMINARIA ALFIN CTM
+    return render(request,'carts/estado_propietarios.html',variables)
+@login_required(login_url='login')
+def estado_carritos(request):
+    if request.user.is_staff:
+        carritos = Carrito.objects.all()
+    else:
+        carritos = Carrito.objects.filter(solicitante=request.user.pk)
+
+    variables = {'carritos':carritos}
+    return render(request,'carts/estado_carritos.html',variables)
+
+
+
+@user_passes_test(lambda u:u.is_staff, login_url=('login'))  
+def aceptar_propietario(request,id):
+    pro = User.objects.filter(id=id)
+    pro.update(is_active=True)
+    return redirect('estado_propietarios')
+
+
+@user_passes_test(lambda u:u.is_staff, login_url=('login'))  
+def rechazar_propietario(request,id):
+    pro = User.objects.filter(id=id)
+    pro.update(is_active=False)
+    return redirect('estado_propietarios')
+@user_passes_test(lambda u:u.is_staff, login_url=('login'))  
+def aceptar_carrito(request,id):
+    cart = Carrito.objects.filter(id=id)
+    cart.update(estado="Aceptado")
+    return redirect('estado_carritos')
+@user_passes_test(lambda u:u.is_staff, login_url=('login'))  
+def rechazar_carrito(request,id):
+    cart = Carrito.objects.filter(id=id)
+    cart.update(estado="Rechazado")
+    return redirect('estado_carritos')
