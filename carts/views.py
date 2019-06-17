@@ -50,16 +50,20 @@ def registro(request):
             if request.POST.get('txttipo') == 'Propietario':
                 try: 
                     user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'),is_active=False)
+                    assign_role(user, 'propietario')
+                    mensaje = 'Registro con exito espere su activacion'
                 except:
                     messages.success(request,'Usuario ya registrado')
+                    
                     variabes = {'alert':alert} 
                     return render(request,'carts/registro.html',variabes)
             else:
                 try:
                     user = User.objects.create_user(username=request.POST.get('txtemail'),password=request.POST.get('txtpass'))
+                    mensaje = 'Registro con exito'
                 except:
                     alert = 'roja' 
-                    messages.success(request,'Usuarioya registrado')
+                    messages.success(request,'Usuario ya registrado')
                     variabes = {'alert':alert} 
                     return render(request,'carts/registro.html',variabes)
             user.perfil.tipo = request.POST.get('txttipo')
@@ -69,9 +73,9 @@ def registro(request):
             user.perfil.direccion = request.POST.get('txtdireccion')
             user.perfil.telefono = int(request.POST.get('txttelefono'))
             try:
-                assign_role(user, 'propietario')
+                
                 user.save()
-                messages.success(request,'Registro con exito espere su activacion')
+                messages.success(request,mensaje)
                 variabes = {'alert':alert} 
                 return render(request,'carts/registro.html',variabes)
             except:

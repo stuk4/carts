@@ -35,10 +35,12 @@
     <div class="form-group">
         <div class="row">
             <div class="col">
-                <input name="txtnombre" type="text" class="form-control" placeholder="Direccion">
+                <input name="txtdireccion" type="text" class="form-control" placeholder="Direccion">
             </div>
             <div class="col">
-                <input required name="txttelefono" type="text" class="form-control" placeholder="Telefono">
+                 <input required type="text" class="form-control"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            name="txttelefono" id="txttelefono" placeholder="Telefono">
             </div>
         </div>
     </div>
