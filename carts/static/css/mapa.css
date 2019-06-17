@@ -5,12 +5,16 @@
     overflow-x: hidden;
 }
 .container-map{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     min-height:100% ;
+    border: 3px solid rgb(247,171,120);
 }
 #map{
-    margin: 5px;
+    
     width: 100%;
-    height: 90vh;
+    height: 88vh;
     background: grey;
 }
