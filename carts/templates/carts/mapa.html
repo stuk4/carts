@@ -1,11 +1,7 @@
 {% extends 'carts/base.html' %}
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1549984893" />
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
-<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+ 
  <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
 {% endblock extra_css %}
 {% block content %}
@@ -77,7 +73,7 @@ function addInfoBubble(map) {
         //   navigator.geolocation.clearWatch(watcher);
         // }, 5000);
         
-           navigator.geolocation.getCurrentPosition(mostrarUbicacion);
+           navigator.geolocation.getCurrentPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
            
         }
         
@@ -86,6 +82,7 @@ function addInfoBubble(map) {
           var lng = ubicacion.coords.longitude;
           var lat = ubicacion.coords.latitude;
           var iam = "{% static 'img/pig2.png' %}";
+          console.log("MI UBICACION")
        var icons = new H.map.Icon(iam);
        function addMarkersToMap(map) {
         var maipu = new H.map.Marker({lat:lat, lng:lng },{icon:icons});
@@ -99,6 +96,9 @@ function addInfoBubble(map) {
       centrarMaipu(map);
       addMarkersToMap(map);
          // console.log(`longitud: ${ lng } | latitud: ${ lat }`);
+        }
+        function erroNo(){
+          console.log('Ops')
         }
  
       
