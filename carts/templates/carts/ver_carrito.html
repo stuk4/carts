@@ -164,6 +164,7 @@
             navigator
                 .geolocation
                 .getCurrentPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
+                
         }
 function erroNo(){
           console.log('Ops')
