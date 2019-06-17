@@ -13,7 +13,9 @@ html,body{
   padding: 0; 
     
 } 
-
+#logout{
+  cursor: pointer;
+}
 img{
     max-width: 100%;
 }
