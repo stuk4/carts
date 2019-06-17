@@ -219,11 +219,8 @@
         </div> 
 {% endblock content %}
 {% block extra_js %}
-
-<script  type="text/javascript" charset="UTF-8" >
-$('#collapseOne').collapse({
-  toggle: true
-})
+<script type="text/javascript" charset="UTF-8">
+    $('#collapseOne').collapse({toggle: true})
 
     /**
      * An event listener is added to listen to tap events on the map.
@@ -232,87 +229,145 @@ $('#collapseOne').collapse({
      * @param  {H.Map} map      A HERE Map instance within the application
      */
     function setUpClickListener(map) {
-      // Attach an event listener to map display
-      // obtain the coordinates and display in an alert box.
-      const long = document.getElementById('txtlongitud')
-      const lat = document.getElementById('txtlatitud')
-      const yo = document.getElementById('mi_ubicacion')
-      map.addEventListener('tap', function (evt) {
-        var coord = map.screenToGeo(evt.currentPointer.viewportX,
-                evt.currentPointer.viewportY);
-        // alert('Clicked at ' + coord.lat  +' ' + coord.lng );
-        long.value = coord.lng;
-        lat.value = coord.lat;
-      });
-      yo.addEventListener('click',function(){
-        if (navigator.geolocation) {
-        //       const watcher = navigator.geolocation.watchPosition(mostrarUbicacion);
-        
-        // setTimeout(() => {
-        //   navigator.geolocation.clearWatch(watcher);
-        // }, 5000);
-        
-           navigator.geolocation.getCurrentPosition(mostrarUbicacion);
-        }
-       
-          
-        function mostrarUbicacion (ubicacion) {
-            const lng = ubicacion.coords.longitude;
-            const late = ubicacion.coords.latitude;
-            long.value = lng;
-            lat.value= late;
-            function centrarMaipu(map){
-        map.setCenter({lat:late, lng:lng });
-        map.setZoom(15.8);
-      }
-      centrarMaipu(map);
-          var iam = "{% static 'img/pig2.png' %}";
-       var icons = new H.map.Icon(iam);
-       function addMarkersToMap(map) {
-        var maipu = new H.map.Marker({lat:late, lng:lng },{icon:icons});
-        map.addObject(maipu);
-     
-      }
-     addMarkersToMap(map)
-        }
-      })
-  
-    }
-    
+        // Attach an event listener to map display obtain the coordinates and display in
+        // an alert box.
+        const long = document.getElementById('txtlongitud')
+        const lat = document.getElementById('txtlatitud')
+        const yo = document.getElementById('mi_ubicacion')
+        map.addEventListener('tap', function (evt) {
+            var coord = map.screenToGeo(
+                evt.currentPointer.viewportX,
+                evt.currentPointer.viewportY
+            );
+            // alert('Clicked at ' + coord.lat  +' ' + coord.lng );
+            long.value = coord.lng;
+            lat.value = coord.lat;
+        });
+        yo.addEventListener('click', function () {
+            if (navigator.geolocation) {
+                // const watcher = navigator.geolocation.watchPosition(mostrarUbicacion);
+                // setTimeout(() => {   navigator.geolocation.clearWatch(watcher); }, 5000);
 
-    
+                navigator
+                    .geolocation
+                    .getCurrentPosition(mostrarUbicacion);
+            }
+
+            function mostrarUbicacion(ubicacion) {
+                const lng = ubicacion.coords.longitude;
+                const late = ubicacion.coords.latitude;
+                long.value = lng;
+                lat.value = late;
+                function centrarYo(map) {
+                    map.setCenter({lat: late, lng: lng});
+                    map.setZoom(15.8);
+                }
+                centrarYo(map);
+                var iam = "{% static 'img/pig2.png' %}";
+                var icons = new H
+                    .map
+                    .Icon(iam);
+                function addMarkersToMap(map) {
+                    var maipu = new H
+                        .map
+                        .Marker({
+                            lat: late,
+                            lng: lng
+                        }, {icon: icons});
+                    map.addObject(maipu);
+
+                }
+                addMarkersToMap(map)
+            }
+        })
+
+    }
+
+    function restrictMap(map) {
+
+        var bounds = new H
+            .geo
+            .Rect(
+                -33.53671726846797,
+                -70.80662211400124,
+                -33.47831878544538,
+                -70.72800120335671
+            );
+
+        map
+            .getViewModel()
+            .addEventListener('sync', function () {
+                var center = map.getCenter();
+
+                if (!bounds.containsPoint(center)) {
+                    if (center.lat > bounds.getTop()) {
+                        center.lat = bounds.getTop();
+                    } else if (center.lat < bounds.getBottom()) {
+                        center.lat = bounds.getBottom();
+                    }
+                    if (center.lng < bounds.getLeft()) {
+                        center.lng = bounds.getLeft();
+                    } else if (center.lng > bounds.getRight()) {
+                        center.lng = bounds.getRight();
+                    }
+                    map.setCenter(center);
+                }
+            });
+
+        //Debug code to visualize where your restriction is
+        map.addObject(new H.map.Rect(bounds, {
+            style: {
+                fillColor: 'rgba(247,171,120,0.1)',
+                strokeColor: 'rgba(247,171,120,0.6)',
+                lineWidth: 5
+            }
+        }));
+    }
+ function centrarMiapu(map){
+        map.setCenter({lat:-33.50962698929563, lng:-70.76243648185998 });
+        map.setZoom(13);
+      }
+      
     /**
      * Boilerplate map initialization code starts below:
      */
-    
+
     //Step 1: initialize communication with the platform
-    var platform = new H.service.Platform({
-      app_id: 'brNJ2r7NYlgWCQ5xQ6LV',
-      app_code: '_XCtQXRbZe6Dl9AGPHNyIg',
-      useHTTPS: true
-    });
+    var platform = new H
+        .service
+        .Platform(
+            {app_id: 'brNJ2r7NYlgWCQ5xQ6LV', app_code: '_XCtQXRbZe6Dl9AGPHNyIg', useHTTPS: true}
+        );
     var pixelRatio = window.devicePixelRatio || 1;
     var defaultLayers = platform.createDefaultLayers({
-      tileSize: pixelRatio === 1 ? 256 : 512,
-      ppi: pixelRatio === 1 ? undefined : 320
+        tileSize: pixelRatio === 1
+            ? 256
+            : 512,
+        ppi: pixelRatio === 1
+            ? undefined
+            : 320
     });
-    
-    //Step 2: initialize a map
-    var map = new H.Map(document.getElementById('map'),
-      defaultLayers.normal.map,{
-      center: {lat: -33.4552348, lng: -70.6954542},
-      zoom: 12,
-      pixelRatio: pixelRatio
-    });
-    
-    //Step 3: make the map interactive
-    // MapEvents enables the event system
-    // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-    
-    setUpClickListener(map);
-      </script>
 
+    //Step 2: initialize a map
+    var map = new H.Map(document.getElementById('map'), defaultLayers.normal.map, {
+        center: {
+            lat: -33.4552348,
+            lng: -70.6954542
+        },
+        zoom: 12,
+        pixelRatio: pixelRatio
+    });
+
+    // Step 3: make the map interactive MapEvents enables the event system Behavior
+    // implements default interactions for pan/zoom (also on mobile touch
+    // environments)
+    var behavior = new H
+        .mapevents
+        .Behavior(new H.mapevents.MapEvents(map));
+    restrictMap(map)
+    centrarMiapu(map)
+    setUpClickListener(map);
+</script>
 <script>
     $(document).ready(function () {
         bsCustomFileInput.init()

@@ -35,9 +35,23 @@
 
             </tbody>
         </table>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalScrollable">
-            Productos
-        </button>
+        <div class="form-group">
+            <div class="row">
+                    <div class="col">
+                            <button id="como" type="button" class="btn btn-info ">
+                                    Como llegar
+                                </button>
+                    </div>
+                    <div class="col">
+                            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModalScrollable">
+                                    ¿Que vende?
+                                </button>
+                    </div>
+            </div>
+         
+              
+        </div>
+      
 
         <!-- Modal- VER PRODUCTOS -->
         <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
@@ -91,109 +105,266 @@
 </div>
 {% endblock content %}
 {% block extra_js %}
-<script type="text/javascript" charset="UTF-8" >
+<script type="text/javascript" charset="UTF-8">
 
+    function addMarkerToGroup(group, coordinate, html) {
+        var icono = "{% static 'img/50x80.png' %}";
+        var icon = new H
+            .map
+            .Icon(icono);
+        var marker = new H
+            .map
+            .Marker(coordinate, {icon: icon});
+        // add custom data to the marker
+        marker.setData(html);
+        group.addObject(marker);
+    }
 
-function addMarkerToGroup(group, coordinate, html) {
-    var icono = "{% static 'img/50x80.png' %}";
-      var icon = new H.map.Icon(icono);
-  var marker = new H.map.Marker(coordinate,{icon:icon});
-  // add custom data to the marker
-  marker.setData(html);
-  group.addObject(marker);
-}
-
-/**
+    /**
  * Add two markers showing the position of Liverpool and Manchester City football clubs.
  * Clicking on a marker opens an infobubble which holds HTML content related to the marker.
  * @param  {H.Map} map      A HERE Map instance within the application
  */
-function addInfoBubble(map) {
-  var group = new H.map.Group();
+    function addInfoBubble(map) {
+        var group = new H
+            .map
+            .Group();
 
-  map.addObject(group);
+        map.addObject(group);
 
-  // add 'tap' event listener, that opens info bubble, to the group
-  group.addEventListener('tap', function (evt) {
-    // event target is the marker itself, group is a parent event target
-    // for all objects that it contains
-    var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
-      // read custom data
-      content: evt.target.getData()
-    });
-    // show info bubble
-    ui.addBubble(bubble);
-  }, false);
+        // add 'tap' event listener, that opens info bubble, to the group
+        group.addEventListener('tap', function (evt) {
+            // event target is the marker itself, group is a parent event target for all
+            // objects that it contains
+            var bubble = new H
+                .ui
+                .InfoBubble(evt.target.getPosition(), {
+                    // read custom data
+                    content: evt
+                        .target
+                        .getData()
+                });
+            // show info bubble
+            ui.addBubble(bubble);
+        }, false);
 
-  addMarkerToGroup(group, {lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} },
-    '<div><a href=\'{% url "ver_carrito" carrito.id %}\' >{{ carrito.nombre }}</a>' +
-    '</div><div >Dueño:{{ carrito.nombre_dueño}}</div>');}
+        addMarkerToGroup(
+            group,
+            {
+                lat: {{ carrito.latitud }},
+                lng: {{ carrito.longitud }}
+            },
+            '<div><a href=\'{% url "ver_carrito" carrito.id %}\' >{{ carrito.nombre }}</a><' +
+                    '/div><div >Dueño:{{ carrito.nombre_dueño}}</div>'
+        );
+    }
 
-//   addMarkerToGroup(group, {lat:53.430, lng:-2.961},
-//     '<div ><a href=\'http://www.liverpoolfc.tv\' >Liverpool</a>' +
-//     '</div><div >Anfield<br>Capacity: 45,362</div>',{icon:icon});
+    var comollego = document.getElementById('como')
+    comollego.addEventListener('click', function () {
+        if (navigator.geolocation) {
+            // const watcher = navigator.geolocation.watchPosition(mostrarUbicacion);
+            // setTimeout(() => {   navigator.geolocation.clearWatch(watcher); }, 5000);
 
+            navigator
+                .geolocation
+                .getCurrentPosition(mostrarUbicacion);
+        }
 
+        function mostrarUbicacion(ubicacion) {
+            const lng = ubicacion.coords.longitude;
+            const lat = ubicacion.coords.latitude;
+            const lng_destino = '{{ carrito.longitud }}';
+            const lat_destino = '{{ carrito.latitud }}';
 
+            var iam = "{% static 'img/pig2.png' %}";
+            var icons = new H
+                .map
+                .Icon(iam);
+            function addMarkersToMap(map) {
+                var maipu = new H
+                    .map
+                    .Marker({
+                        lat: lat,
+                        lng: lng
+                    }, {icon: icons});
+                map.addObject(maipu);
 
+            }
+            addMarkersToMap(map)
+            function calculateRouteFromAtoB(platform) {
+                var router = platform.getRoutingService(),
+                    routeRequestParams = {
+                        mode: 'shortest;pedestrian',
+                        representation: 'display',
+                        waypoint0: lat.toString() + ',' + lng.toString(), // St Paul's Cathedral
+                        waypoint1: lat_destino + ',' + lng_destino, // Tate Modern
+                        routeattributes: 'waypoints,summary,shape,legs',
+                        maneuverattributes: 'direction,action'
+                    };
 
+                router.calculateRoute(routeRequestParams, onSuccess, onError);
+            }
+            function onError(error) {
+                alert('Ooops!');
+            }
 
+            function onSuccess(result) {
+                var route = result
+                    .response
+                    .route[0];
+                /*
+  * The styling of the route response on the map is entirely under the developer's control.
+  * A representitive styling can be found the full JS + HTML code of this example
+  * in the functions below:
+  */
+                addRouteShapeToMap(route);
+                addManueversToMap(route);
 
+                // addWaypointsToPanel(route.waypoint);   addManueversToPanel(route);
+                // addSummaryToPanel(route.summary); ... etc.
+            }
+            function addManueversToMap(route) {
+                var svgMarkup = '<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="8" ' +
+                            'cy="8" r="8" fill="#1b468d" stroke="white" stroke-width="1"  /></svg>',
+                    dotIcon = new H
+                        .map
+                        .Icon(svgMarkup, {
+                            anchor: {
+                                x: 8,
+                                y: 8
+                            }
+                        }),
+                    group = new H
+                        .map
+                        .Group(),
+                    i,
+                    j;
 
+                // Add a marker for each maneuver
+                for (i = 0; i < route.leg.length; i += 1) {
+                    for (j = 0; j < route.leg[i].maneuver.length; j += 1) {
+                        // Get the next maneuver.
+                        maneuver = route
+                            .leg[i]
+                            .maneuver[j];
+                        // Add a marker to the maneuvers group
+                        var marker = new H
+                            .map
+                            .Marker({
+                                lat: maneuver.position.latitude,
+                                lng: maneuver.position.longitude
+                            }, {icon: dotIcon});
+                        marker.instruction = maneuver.instruction;
+                        group.addObject(marker);
+                    }
+                }
 
-    function centrarMaipu(map){
-        map.setCenter({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} });
+                group.addEventListener('tap', function (evt) {
+                    map.setCenter(evt.target.getPosition());
+                    openBubble(evt.target.getPosition(), evt.target.instruction);
+                }, false);
+
+                // Add the maneuvers group to the map
+                map.addObject(group);
+            }
+            function addRouteShapeToMap(route) {
+                var lineString = new H
+                        .geo
+                        .LineString(),
+                    routeShape = route.shape,
+                    polyline;
+
+                routeShape.forEach(function (point) {
+                    var parts = point.split(',');
+                    lineString.pushLatLngAlt(parts[0], parts[1]);
+                });
+
+                polyline = new H
+                    .map
+                    .Polyline(lineString, {
+                        style: {
+                            lineWidth: 4,
+                            strokeColor: 'rgba(0, 128, 255, 0.7)'
+                        }
+                    });
+                // Add the polyline to the map
+                map.addObject(polyline);
+                // And zoom to its bounding rectangle
+                map.setViewBounds(polyline.getBounds(), true);
+            }
+
+            function addWaypointsToPanel(waypoints) {
+
+                var nodeH3 = document.createElement('h3'),
+                    waypointLabels = [],
+                    i;
+
+                for (i = 0; i < waypoints.length; i += 1) {
+                    waypointLabels.push(waypoints[i].label)
+                }
+
+                // nodeH3.textContent = waypointLabels.join(' - ');
+                // routeInstructionsContainer.innerHTML = '';
+                // routeInstructionsContainer.appendChild(nodeH3);
+            }
+            calculateRouteFromAtoB(platform);
+        }
+
+    })
+
+    function centrarMaipu(map) {
+        map.setCenter({lat: {{ carrito.latitud }}, lng: {{ carrito.longitud }}});
         map.setZoom(16);
-      }
-    //   var icono = "{% static 'img/50x80.png' %}";
-    //   var icon = new H.map.Icon(icono);
-    //   function addMarkersToMap(map) {
-    //     var maipu = new H.map.Marker({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }} },{icon:icon});
-    //     map.addObject(maipu);
-      
-      
-    //   }
-      
-      
-      
-      
-      
-      
-      
-      /**
+    }
+    // var icono = "{% static 'img/50x80.png' %}";   var icon = new
+    // H.map.Icon(icono);   function addMarkersToMap(map) {     var maipu = new
+    // H.map.Marker({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }}
+    // },{icon:icon});     map.addObject(maipu);   }
+
+    /**
        * Boilerplate map initialization code starts below:
        */
-      
-      //Step 1: initialize communication with the platform
-      var platform = new H.service.Platform({
-        app_id: 'brNJ2r7NYlgWCQ5xQ6LV',
-        app_code: '_XCtQXRbZe6Dl9AGPHNyIg',
-        useHTTPS: true
-      });
-      var pixelRatio = window.devicePixelRatio || 1;
-      var defaultLayers = platform.createDefaultLayers({
-        tileSize: pixelRatio === 1 ? 256 : 512,
-        ppi: pixelRatio === 1 ? undefined : 320
-      });
-      
-      //Step 2: initialize a map  - not specificing a location will give a whole world view.
-      var map = new H.Map(document.getElementById('map'),
-        defaultLayers.normal.map, {pixelRatio: pixelRatio});
-      
-      //Step 3: make the map interactive
-      // MapEvents enables the event system
-      // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-      
-      // AGREGAR COMPONENTES UI
-      var ui = H.ui.UI.createDefault(map, defaultLayers,'es-ES');
-      
-      //OPCIONES DEL MAPAA
-      
-      // PRIMERO ES PARA CENTRA EL MAPA EN MAIPUNGA
-      centrarMaipu(map);
-      // AGREGAR MARCADORES
-    //   addMarkersToMap(map);
+
+    //Step 1: initialize communication with the platform
+    var platform = new H
+        .service
+        .Platform(
+            {app_id: 'brNJ2r7NYlgWCQ5xQ6LV', app_code: '_XCtQXRbZe6Dl9AGPHNyIg', useHTTPS: true}
+        );
+    var pixelRatio = window.devicePixelRatio || 1;
+    var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1
+            ? 256
+            : 512,
+        ppi: pixelRatio === 1
+            ? undefined
+            : 320
+    });
+
+    // Step 2: initialize a map  - not specificing a location will give a whole
+    // world view.
+    var map = new H.Map(
+        document.getElementById('map'),
+        defaultLayers.normal.map,
+        {pixelRatio: pixelRatio}
+    );
+
+    // Step 3: make the map interactive MapEvents enables the event system Behavior
+    // implements default interactions for pan/zoom (also on mobile touch
+    // environments)
+    var behavior = new H
+        .mapevents
+        .Behavior(new H.mapevents.MapEvents(map));
+
+    // AGREGAR COMPONENTES UI
+    var ui = H
+        .ui
+        .UI
+        .createDefault(map, defaultLayers, 'es-ES');
+
+    //OPCIONES DEL MAPAA PRIMERO ES PARA CENTRA EL MAPA EN MAIPUNGA
+    centrarMaipu(map);
+    // AGREGAR MARCADORES   addMarkersToMap(map);
     addInfoBubble(map);
 </script>
 
