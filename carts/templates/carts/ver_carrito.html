@@ -222,7 +222,7 @@ function actualizarPosicion(event) {
      
       
       llamdas++;
-      var mul = 10;
+      var mul = 30;
       var result = llamdas%mul;
       if (result==0){
             map.addObject(markerpaw);
@@ -264,7 +264,7 @@ routeRendered = true;
 
     navigator
     .geolocation
-    .watchPosition(actualizarPosicion,erroNo,{maximumAge:0, timeout:15000, enableHighAccuracy:true});
+    .watchPosition(actualizarPosicion,erroNo,{maximumAge:0, timeout:5000, enableHighAccuracy:true});
 
 
 
