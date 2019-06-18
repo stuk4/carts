@@ -64,7 +64,7 @@ function addInfoBubble(map) {
 
 
   
-
+{% comment %} 
 
       if (navigator.geolocation) {
         //       const watcher = navigator.geolocation.watchPosition(mostrarUbicacion);
@@ -73,16 +73,17 @@ function addInfoBubble(map) {
         //   navigator.geolocation.clearWatch(watcher);
         // }, 5000);
         
-           navigator.geolocation.getCurrentPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
+           navigator.geolocation.watchPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
            
-        }
+        } {% endcomment %}
         
           
-        function mostrarUbicacion (ubicacion) {
-          var lng = ubicacion.coords.longitude;
+        {% comment %} function mostrarUbicacion (ubicacion) {
+           var lng = ubicacion.coords.longitude;
           var lat = ubicacion.coords.latitude;
           var iam = "{% static 'img/pig2.png' %}";
-          console.log("MI UBICACION")
+      
+         
        var icons = new H.map.Icon(iam);
        function addMarkersToMap(map) {
         var maipu = new H.map.Marker({lat:lat, lng:lng },{icon:icons});
@@ -94,17 +95,58 @@ function addInfoBubble(map) {
         map.setZoom(15.8);
       }
       centrarMaipu(map);
-      addMarkersToMap(map);
+      addMarkersToMap(map);  
+
+
+      
          // console.log(`longitud: ${ lng } | latitud: ${ lat }`);
-        }
-        function erroNo(){
-          console.log('Ops')
-        }
+        } {% endcomment %}
+
+
+  function actualizarPosicion(event) {
+    var HEREHQcoordinates = {
+        lat: event.coords.latitude,
+        lng: event.coords.longitude
+    };
+
+    var iam = "{% static 'img/pig2.png' %}";
+
+    var icon1 = new H
+        .map
+        .Icon(iam);
+    var marker = new H
+        .map
+        .Marker(HEREHQcoordinates, {icon: icon1});
+      //VEO SI LA UBICACION NO ES LA MISMA QUE LA ANTERIOR BORRO EL MARCADOR 
+      //QUE HABIA PUESTO
+    if(this.miubicacion){
+      map.removeObject(this.miubicacion);
+      console.log("Chancho removido")
+    }
+    console.log("CHANCHO AGREGADO")
+    //AGREGO MARCADOR UBICACION ACTUAL
+    map.addObject(marker);
+    //GUARDO MARCADOR UBICACION ACTUAL
+    this.miubicacion = map.addObject(marker);
+    //CENTRO EN MI UBICACION CONSTANTEMENTE
+    map.setCenter(HEREHQcoordinates);
+     //ZOOM EN MI UBICACION CONSTANTEMENTE
+    map.setZoom(15.8);
+
+
+}
  
-      
-     
-      
-      
+    navigator
+    .geolocation
+    .watchPosition(actualizarPosicion,erroNo,{maximumAge:0, timeout:5000, enableHighAccuracy:true});
+
+
+
+function erroNo(err) {
+   alert("Usted a denegado la ubicación, si desea usar el mapa vuelva activarla")
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+}
+
       
       
       /**
