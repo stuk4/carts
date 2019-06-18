@@ -8,6 +8,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
 from PIL import Image
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 class Perfil(models.Model):
     tipos = (('Propietario','Propietario'),
             ('Normal','Normal'))
@@ -44,7 +46,9 @@ class Carrito(models.Model):
         super(Carrito, self).save(*args, **kwargs)
     def __str__(self):
         return self.nombre
-    
+@receiver(post_delete, sender=Carrito)
+def submission_delete(sender, instance, **kwargs):
+    instance.imagen.delete(False)    
 
 class Productos(models.Model):
     carritos = models.ForeignKey(Carrito,on_delete=models.CASCADE)
@@ -60,3 +64,6 @@ class Productos(models.Model):
         output_size = (150, 100)
         img.thumbnail(output_size)
         img.save(self.imagen.path)
+@receiver(post_delete, sender=Productos)
+def submission_delete(sender, instance, **kwargs):
+    instance.imagen.delete(False) 
