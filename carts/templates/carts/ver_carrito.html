@@ -33,16 +33,12 @@
         </table>
         <div class="form-group">
             <div class="row">
-                    <div class="col">
-                            <button id="como" type="button" class="btn btn-info ">
-                                    Como llegar
-                                </button>
-                    </div>
-                    <div class="col">
-                            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModalScrollable">
+                
+             
+                            <button type="button" class="btn mx-auto btn-primary " data-toggle="modal" data-target="#exampleModalScrollable">
                                     ¿Que vende?
                                 </button>
-                    </div>
+              
             </div>
          
               
@@ -156,175 +152,266 @@
     }
 
     var comollego = document.getElementById('como')
-    comollego.addEventListener('click', function () {
-        if (navigator.geolocation) {
-            // const watcher = navigator.geolocation.watchPosition(mostrarUbicacion);
-            // setTimeout(() => {   navigator.geolocation.clearWatch(watcher); }, 5000);
+//     comollego.addEventListener('click', function () {
+//         if (navigator.geolocation) {
+     
 
-            navigator
-                .geolocation
-                .getCurrentPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
+//             navigator
+//                 .geolocation
+//                 .getCurrentPosition(mostrarUbicacion,erroNo,{maximumAge:30000, timeout:5000, enableHighAccuracy:true});
                 
-        }
-function erroNo(){
-          console.log('Ops')
-        }
-        function mostrarUbicacion(ubicacion) {
-            const lng = ubicacion.coords.longitude;
-            const lat = ubicacion.coords.latitude;
-            const lng_destino = '{{ carrito.longitud }}';
-            const lat_destino = '{{ carrito.latitud }}';
+//         }
+// function erroNo(){
+//           console.log('Ops')
+//         }
+//         function mostrarUbicacion(ubicacion) {
+//             const lng = ubicacion.coords.longitude;
+//             const lat = ubicacion.coords.latitude;
+//             const lng_destino = '{{ carrito.longitud }}';
+//             const lat_destino = '{{ carrito.latitud }}';
 
-            var iam = "{% static 'img/pig2.png' %}";
-            var icons = new H
-                .map
-                .Icon(iam);
-            function addMarkersToMap(map) {
-                var maipu = new H
-                    .map
-                    .Marker({
-                        lat: lat,
-                        lng: lng
-                    }, {icon: icons});
-                map.addObject(maipu);
+//             var iam = "{% static 'img/pig2.png' %}";
+//             var icons = new H
+//                 .map
+//                 .Icon(iam);
+//             function addMarkersToMap(map) {
+//                 var maipu = new H
+//                     .map
+//                     .Marker({
+//                         lat: lat,
+//                         lng: lng
+//                     }, {icon: icons});
+//                 map.addObject(maipu);
 
-            }
-            addMarkersToMap(map)
-            function calculateRouteFromAtoB(platform) {
-                var router = platform.getRoutingService(),
-                    routeRequestParams = {
-                        mode: 'shortest;pedestrian',
-                        representation: 'display',
-                        waypoint0: lat.toString() + ',' + lng.toString(), // St Paul's Cathedral
-                        waypoint1: lat_destino + ',' + lng_destino, // Tate Modern
-                        routeattributes: 'waypoints,summary,shape,legs',
-                        maneuverattributes: 'direction,action'
-                    };
+//             }
+//             addMarkersToMap(map)
+            // function calculateRouteFromAtoB(platform) {
+            //     var router = platform.getRoutingService(),
+            //         routeRequestParams = {
+            //             mode: 'shortest;pedestrian',
+            //             representation: 'display',
+            //             waypoint0: lat.toString() + ',' + lng.toString(), 
+            //             waypoint1: lat_destino + ',' + lng_destino, 
+            //             routeattributes: 'waypoints,summary,shape,legs',
+            //             maneuverattributes: 'direction,action'
+            //         };
 
-                router.calculateRoute(routeRequestParams, onSuccess, onError);
-            }
-            function onError(error) {
-                alert('Ooops!');
-            }
+            //     router.calculateRoute(routeRequestParams, onSuccess, onError);
+            // }
+//             function onError(error) {
+//                 alert('Ooops!');
+//             }
 
-            function onSuccess(result) {
-                var route = result
-                    .response
-                    .route[0];
-                /*
-  * The styling of the route response on the map is entirely under the developer's control.
-  * A representitive styling can be found the full JS + HTML code of this example
-  * in the functions below:
-  */
-                addRouteShapeToMap(route);
-                addManueversToMap(route);
+//             function onSuccess(result) {
+//                 var route = result
+//                     .response
+//                     .route[0];
 
-                // addWaypointsToPanel(route.waypoint);   addManueversToPanel(route);
-                // addSummaryToPanel(route.summary); ... etc.
-            }
-            function addManueversToMap(route) {
-                var svgMarkup = '<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="8" ' +
-                            'cy="8" r="8" fill="#1b468d" stroke="white" stroke-width="1"  /></svg>',
-                    dotIcon = new H
-                        .map
-                        .Icon(svgMarkup, {
-                            anchor: {
-                                x: 8,
-                                y: 8
-                            }
-                        }),
-                    group = new H
-                        .map
-                        .Group(),
-                    i,
-                    j;
+//                 addRouteShapeToMap(route);
+//                 addManueversToMap(route);
 
-                // Add a marker for each maneuver
-                for (i = 0; i < route.leg.length; i += 1) {
-                    for (j = 0; j < route.leg[i].maneuver.length; j += 1) {
-                        // Get the next maneuver.
-                        maneuver = route
-                            .leg[i]
-                            .maneuver[j];
-                        // Add a marker to the maneuvers group
-                        var marker = new H
-                            .map
-                            .Marker({
-                                lat: maneuver.position.latitude,
-                                lng: maneuver.position.longitude
-                            }, {icon: dotIcon});
-                        marker.instruction = maneuver.instruction;
-                        group.addObject(marker);
-                    }
-                }
+            
+//             }
+//             function addManueversToMap(route) {
+//                 var svgMarkup = '<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><circle cx="8" ' +
+//                             'cy="8" r="8" fill="#1b468d" stroke="white" stroke-width="1"  /></svg>',
+//                     dotIcon = new H
+//                         .map
+//                         .Icon(svgMarkup, {
+//                             anchor: {
+//                                 x: 8,
+//                                 y: 8
+//                             }
+//                         }),
+//                     group = new H
+//                         .map
+//                         .Group(),
+//                     i,
+//                     j;
 
-                group.addEventListener('tap', function (evt) {
-                    map.setCenter(evt.target.getPosition());
-                    openBubble(evt.target.getPosition(), evt.target.instruction);
-                }, false);
+             
+//                 for (i = 0; i < route.leg.length; i += 1) {
+//                     for (j = 0; j < route.leg[i].maneuver.length; j += 1) {
+                       
+//                         maneuver = route
+//                             .leg[i]
+//                             .maneuver[j];
+                      
+//                         var marker = new H
+//                             .map
+//                             .Marker({
+//                                 lat: maneuver.position.latitude,
+//                                 lng: maneuver.position.longitude
+//                             }, {icon: dotIcon});
+//                         marker.instruction = maneuver.instruction;
+//                         group.addObject(marker);
+//                     }
+//                 }
 
-                // Add the maneuvers group to the map
-                map.addObject(group);
-            }
-            function addRouteShapeToMap(route) {
-                var lineString = new H
-                        .geo
-                        .LineString(),
-                    routeShape = route.shape,
-                    polyline;
+//                 group.addEventListener('tap', function (evt) {
+//                     map.setCenter(evt.target.getPosition());
+//                     openBubble(evt.target.getPosition(), evt.target.instruction);
+//                 }, false);
 
-                routeShape.forEach(function (point) {
-                    var parts = point.split(',');
-                    lineString.pushLatLngAlt(parts[0], parts[1]);
-                });
+//                 // Add the maneuvers group to the map
+//                 map.addObject(group);
+//             }
+//             function addRouteShapeToMap(route) {
+//                 var lineString = new H
+//                         .geo
+//                         .LineString(),
+//                     routeShape = route.shape,
+//                     polyline;
 
-                polyline = new H
-                    .map
-                    .Polyline(lineString, {
-                        style: {
-                            lineWidth: 4,
-                            strokeColor: 'rgba(0, 128, 255, 0.7)'
-                        }
-                    });
-                // Add the polyline to the map
-                map.addObject(polyline);
-                // And zoom to its bounding rectangle
-                map.setViewBounds(polyline.getBounds(), true);
-            }
+//                 routeShape.forEach(function (point) {
+//                     var parts = point.split(',');
+//                     lineString.pushLatLngAlt(parts[0], parts[1]);
+//                 });
 
-            function addWaypointsToPanel(waypoints) {
+//                 polyline = new H
+//                     .map
+//                     .Polyline(lineString, {
+//                         style: {
+//                             lineWidth: 4,
+//                             strokeColor: 'rgba(0, 128, 255, 0.7)'
+//                         }
+//                     });
+         
+//                 map.addObject(polyline);
+           
+//                 map.setViewBounds(polyline.getBounds(), true);
+//             }
 
-                var nodeH3 = document.createElement('h3'),
-                    waypointLabels = [],
-                    i;
+//             function addWaypointsToPanel(waypoints) {
 
-                for (i = 0; i < waypoints.length; i += 1) {
-                    waypointLabels.push(waypoints[i].label)
-                }
+//                 var nodeH3 = document.createElement('h3'),
+//                     waypointLabels = [],
+//                     i;
 
-                // nodeH3.textContent = waypointLabels.join(' - ');
-                // routeInstructionsContainer.innerHTML = '';
-                // routeInstructionsContainer.appendChild(nodeH3);
-            }
-            calculateRouteFromAtoB(platform);
-        }
+//                 for (i = 0; i < waypoints.length; i += 1) {
+//                     waypointLabels.push(waypoints[i].label)
+//                 }
 
-    })
+               
+//             }
+//             calculateRouteFromAtoB(platform);
+//         }
+
+//     })
+
+function HERERoute (map, platform, routeOptions) {
+  var router = platform.getRoutingService();
+
+ var onSuccess = function(result) {
+  var route,
+    routeShape,
+    startPoint,
+    endPoint,
+    strip;
+
+  if (result.response.route) {
+    route = result.response.route[0];
+    routeShape = route.shape;
+
+    strip = new H.geo.Strip();
+
+    routeShape.forEach(function(point) {
+      var parts = point.split(',');
+      strip.pushLatLngAlt(parts[0], parts[1]);
+    });
+
+    var routeLine = new H.map.Polyline(strip, {
+      style: { strokeColor: 'rgba(247,171,120)', lineWidth: 10 }
+    });
+
+    map.addObject(routeLine);
+
+    map.setViewBounds(routeLine.getBounds());
+  }
+};
+  var onError = function(error) {
+    console.error('Oh no! There was some communication error!', error);
+  }
+
+  router.calculateRoute(routeOptions, onSuccess, onError);
+}
+function locationToWaypointString(coordinates) {
+  return  coordinates.lat + ',' + coordinates.lng;
+}
+var routeRendered = false;
+function actualizarPosicion(event) {
+    var miubicacion = {
+        lat: event.coords.latitude,
+        lng: event.coords.longitude
+    };
+    ///DIRECTORIOS IMAGENES Markers
+    var iam = "{% static 'img/pig2.png' %}";
+    var filepaw = "{% static 'img/paws.png' %}";
+    //icono CERDO
+    var icon1 = new H
+        .map
+        .Icon(iam);
+        ///iconopatas
+    var icon2 = new H
+        .map
+        .Icon(filepaw);
+    var marker = new H
+        .map
+        .Marker(miubicacion, {icon: icon1});
+    var markerpaw = new H
+        .map
+        .Marker(miubicacion, {icon: icon2});    
+      //VEO SI LA UBICACION NO ES LA MISMA QUE LA ANTERIOR BORRO EL MARCADOR 
+      //QUE HABIA PUESTO
+    if(this.miubicacionMarker){
+      map.removeObject(this.miubicacionMarker);
+      console.log("Chancho removido")
+    }
+    console.log("CHANCHO AGREGADO")
+    //AGREGO MARCADOR UBICACION ACTUAL
+    map.addObject(marker);
+    map.addObject(markerpaw);
+    //GUARDO MARCADOR UBICACION ACTUAL
+    this.miubicacionMarker = map.addObject(marker);
+    //CENTRO EN MI UBICACION CONSTANTEMENTE
+    map.setCenter(miubicacion);
+     //ZOOM EN MI UBICACION CONSTANTEMENTE
+    map.setZoom(15.8);
+//             const lng_destino = '{{ carrito.longitud }}';
+//             const lat_destino = '{{ carrito.latitud }}';
+var carritoelegido = {
+    lat: {{ carrito.latitud }},
+    lng: {{ carrito.longitud }}
+}
+    if (!routeRendered) {
+var route = new HERERoute(map, platform, {
+mode: 'shortest;pedestrian',
+representation: 'display',
+waypoint0: locationToWaypointString(miubicacion),
+waypoint1: locationToWaypointString(carritoelegido)
+});
+ 
+routeRendered = true;
+}
+
+}
+ function erroNo(err) {
+   alert("Usted a denegado la ubicación, si desea usar el mapa vuelva activarla")
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+}
+
+    navigator
+    .geolocation
+    .watchPosition(actualizarPosicion,erroNo,{maximumAge:0, timeout:5000, enableHighAccuracy:true});
+
+
+
 
     function centrarMaipu(map) {
         map.setCenter({lat: {{ carrito.latitud }}, lng: {{ carrito.longitud }}});
         map.setZoom(16);
     }
-    // var icono = "{% static 'img/50x80.png' %}";   var icon = new
-    // H.map.Icon(icono);   function addMarkersToMap(map) {     var maipu = new
-    // H.map.Marker({lat:{{ carrito.latitud }}, lng:{{ carrito.longitud }}
-    // },{icon:icon});     map.addObject(maipu);   }
 
-    /**
-       * Boilerplate map initialization code starts below:
-       */
-
-    //Step 1: initialize communication with the platform
     var platform = new H
         .service
         .Platform(
