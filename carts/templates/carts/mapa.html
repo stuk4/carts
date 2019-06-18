@@ -57,7 +57,7 @@ function addInfoBubble(map) {
 };
 
 
-
+var llamdas = 0;
   function actualizarPosicion(event) {
     var miubicacion = {
         lat: event.coords.latitude,
@@ -84,12 +84,18 @@ function addInfoBubble(map) {
       //QUE HABIA PUESTO
     if(this.miubicacionMarker){
       map.removeObject(this.miubicacionMarker);
-      console.log("Chancho removido")
+        llamdas++;
+      var mul = 20;
+      var result = llamdas%mul;
+      if (result==0){
+            map.addObject(markerpaw);
+      
+      }
     }
-    console.log("CHANCHO AGREGADO")
+   
     //AGREGO MARCADOR UBICACION ACTUAL
     map.addObject(marker);
-    map.addObject(markerpaw);
+   
     //GUARDO MARCADOR UBICACION ACTUAL
     this.miubicacionMarker = map.addObject(marker);
     //CENTRO EN MI UBICACION CONSTANTEMENTE
