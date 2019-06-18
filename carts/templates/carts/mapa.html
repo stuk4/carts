@@ -98,14 +98,16 @@ var llamdas = 0;
    
     //GUARDO MARCADOR UBICACION ACTUAL
     this.miubicacionMarker = map.addObject(marker);
-    //CENTRO EN MI UBICACION CONSTANTEMENTE
-    map.setCenter(miubicacion);
-     //ZOOM EN MI UBICACION CONSTANTEMENTE
-    map.setZoom(15.8);
+
+
 
 
 }
- 
+   function centrarMaipu(map) {
+        map.setCenter({lat: -33.4844089, lng:-70.7328651 });
+        map.setZoom(12.5);
+    }
+    
     navigator
     .geolocation
     .watchPosition(actualizarPosicion,erroNo,{maximumAge:0, timeout:5000, enableHighAccuracy:true});
@@ -154,7 +156,7 @@ function erroNo(err) {
       // AGREGAR MARCADORES
     //   addMarkersToMap(map);
     addInfoBubble(map);
-    
+    centrarMaipu(map)
 </script>
 
 {% endblock extra_js %}

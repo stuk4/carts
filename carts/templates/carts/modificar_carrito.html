@@ -319,9 +319,22 @@
         }));
     }
  function centrarMiapu(map){
-        map.setCenter({lat:-33.50962698929563, lng:-70.76243648185998 });
-        map.setZoom(13);
+        map.setCenter({lat:{{  micarro.latitud }}, lng:{{  micarro.longitud }} });
+        map.setZoom(14.7);
+     
+   
       }
+      function miCarrito(map){
+    var iconactual = "{%  static 'img/50x80.png' %}"
+         var icon2 = new H
+        .map
+        .Icon(iconactual);
+            var marker = new H
+        .map
+        .Marker({lat:{{  micarro.latitud }}, lng:{{  micarro.longitud }} }, {icon: icon2});
+        map.addObject(marker);
+      }
+     
       
     /**
      * Boilerplate map initialization code starts below:
@@ -361,6 +374,7 @@
         .Behavior(new H.mapevents.MapEvents(map));
     restrictMap(map)
     centrarMiapu(map)
+    miCarrito(map)
     setUpClickListener(map);
 </script>
 <script>
