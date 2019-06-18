@@ -44,6 +44,10 @@ class Carrito(models.Model):
     def save(self, *args, **kwargs):
         self.slug = self.nombre.lower().replace(" ",'_')
         super(Carrito, self).save(*args, **kwargs)
+        img = Image.open(self.imagen.path)
+        output_size = (286, 200)
+        img.thumbnail(output_size)
+        img.save(self.imagen.path)
     def __str__(self):
         return self.nombre
 @receiver(post_delete, sender=Carrito)
