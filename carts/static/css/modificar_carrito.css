@@ -4,7 +4,11 @@
    background-position: bottom;
    background-size: cover;
    background-repeat: no-repeat;
-   
+  
+}
+.general-container form,.custom-file-label{
+   overflow: hidden;
+  
 }
 .general-container .form-one {
    width: 80%;

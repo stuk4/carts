@@ -18,7 +18,9 @@
    
     background: rgb(1,114,76)
 }
-
+.custom-file-label{
+    overflow: hidden;
+}
 @media screen and (min-width:700px){
     .general-container form {
         width: 50%;
