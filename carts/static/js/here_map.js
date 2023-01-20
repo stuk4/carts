@@ -25,8 +25,8 @@
       
       //Step 1: initialize communication with the platform
       var platform = new H.service.Platform({
-        app_id: 'brNJ2r7NYlgWCQ5xQ6LV',
-        app_code: '_XCtQXRbZe6Dl9AGPHNyIg',
+        app_id: '<APPID>',
+        app_code: '<APPCODE>',
         useHTTPS: true
       });
       var pixelRatio = window.devicePixelRatio || 1;
